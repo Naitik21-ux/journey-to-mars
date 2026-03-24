@@ -25,7 +25,7 @@ function App() {
           height: size + "px",
           top: Math.random() * 100 + "vh",
           left: Math.random() * 100 + "vw",
-          animationDuration: Math.random() * 40 + 20 + "s",
+          animationDuration: Math.random() * 60 + 40 + "s",
           animationDelay: Math.random() * 5 + "s",
           "--x": moveX + "px",
           "--y": moveY + "px",
@@ -59,12 +59,26 @@ function App() {
         trigger: "body",
         start: "top top",
         end: "bottom bottom",
-        scrub: true,
-      },
-      y: -800,
-      x: 200,
-      rotation: 45,
+      scrub: true,
+    },
+    y: -900,
+    scale: 1.5,
+    rotation: 30,
+    transformOrigin: "center",
+    ease: "none"
     });
+
+    // zoom effect on content
+
+    gsap.to(".zoom-container", {
+  scale: 1.5,
+  scrollTrigger: {
+    trigger: ".zoom-container",
+    start: "top top",
+    end: "bottom bottom",
+    scrub: true,
+  },
+});
 
     gsap.utils.toArray(".section").forEach((sec) => {
       gsap.fromTo(
@@ -106,7 +120,7 @@ function App() {
       </div>
 
       {/* CONTENT */}
-      <div className="relative z-10">
+      <div className="relative z-10 zoom-container will-change-transform">
 
         {/* HERO */}
         <section className="section h-screen flex flex-col items-center justify-center text-center px-4 space-y-6">

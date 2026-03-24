@@ -96,14 +96,24 @@ function App() {
   // ✅ Loading screen
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black text-white text-3xl animate-pulse">
-        🚀 Preparing Mission...
+      <div className="h-screen flex flex-col items-center justify-center bg-black text-white text-3xl space-y-4">
+        <div className="text-6xl animate-bounce">🚀</div>
+        <p className="animate-pulse">Launching Mission...</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-black text-white min-h-screen relative overflow-x-hidden">
+    <div
+      className="bg-black text-white min-h-screen relative overflow-x-hidden"
+      onMouseMove={(e) => {
+        gsap.to(".rocket", {
+          x: (e.clientX - window.innerWidth / 2) / 20,
+          y: (e.clientY - window.innerHeight / 2) / 20,
+          duration: 0.5,
+        });
+      }}
+    >
 
       {/* ⭐ Stars */}
       <div className="fixed inset-0 z-0 pointer-events-none">

@@ -6,11 +6,10 @@ import Lenis from "@studio-freight/lenis";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
-  // ✅ STATE (ONLY ONCE)
   const [loading, setLoading] = useState(true);
   const [activePlanet, setActivePlanet] = useState(null);
 
-  // ⭐ Stars
+  // ⭐ Stars (with better depth)
   const stars = Array.from({ length: 120 }).map((_, i) => {
     const size = Math.random() * 3 + 1;
     const moveX = (Math.random() - 0.5) * 200;
@@ -36,7 +35,7 @@ function App() {
 
   // 🚀 Loading
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
+    const timer = setTimeout(() => setLoading(false), 1800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -52,33 +51,30 @@ function App() {
     requestAnimationFrame(raf);
   }, []);
 
-  // 🚀 GSAP Animations
+  // 🚀 Animations
   useEffect(() => {
     gsap.to(".rocket", {
       scrollTrigger: {
         trigger: "body",
         start: "top top",
         end: "bottom bottom",
-      scrub: true,
-    },
-    y: -900,
-    scale: 1.5,
-    rotation: 30,
-    transformOrigin: "center",
-    ease: "none"
+        scrub: true,
+      },
+      y: -900,
+      scale: 1.5,
+      rotation: 30,
+      ease: "none",
     });
 
-    // zoom effect on content
-
     gsap.to(".zoom-container", {
-  scale: 1.5,
-  scrollTrigger: {
-    trigger: ".zoom-container",
-    start: "top top",
-    end: "bottom bottom",
-    scrub: true,
-  },
-});
+      scale: 1.5,
+      scrollTrigger: {
+        trigger: ".zoom-container",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+      },
+    });
 
     gsap.utils.toArray(".section").forEach((sec) => {
       gsap.fromTo(
@@ -97,11 +93,11 @@ function App() {
     });
   }, []);
 
-  // ✅ LOADING SCREEN (ONLY HERE)
+  // ✅ Loading screen
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-black text-white text-3xl">
-        🚀 Launching Mission...
+      <div className="h-screen flex items-center justify-center bg-black text-white text-3xl animate-pulse">
+        🚀 Preparing Mission...
       </div>
     );
   }
@@ -119,14 +115,14 @@ function App() {
         🚀
       </div>
 
-      {/* CONTENT */}
+      {/* 🌌 MAIN CONTENT (ZOOM) */}
       <div className="relative z-10 zoom-container will-change-transform">
 
         {/* HERO */}
         <section className="section h-screen flex flex-col items-center justify-center text-center px-4 space-y-6">
           <h1
             className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white to-gray-400 text-transparent bg-clip-text"
-            style={{ textShadow: "0 0 20px rgba(255,255,255,0.6)" }}
+            style={{ textShadow: "0 0 25px rgba(255,255,255,0.7)" }}
           >
             🚀 Journey to Mars
           </h1>
@@ -174,37 +170,38 @@ function App() {
           </div>
         </section>
 
-        {/* POPUP */}
-        {activePlanet && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-            <div className="bg-gray-900 p-8 rounded-xl text-center max-w-md">
-
-              {activePlanet === "earth" && (
-                <>
-                  <h2 className="text-2xl mb-4">🌍 Earth</h2>
-                  <p>Our home planet. Launch point for humanity’s journey to Mars.</p>
-                </>
-              )}
-
-              {activePlanet === "mars" && (
-                <>
-                  <h2 className="text-2xl mb-4">🔴 Mars</h2>
-                  <p>The red planet. Future home for human exploration.</p>
-                </>
-              )}
-
-              <button
-                onClick={() => setActivePlanet(null)}
-                className="mt-6 px-4 py-2 bg-white text-black rounded"
-              >
-                Close
-              </button>
-
-            </div>
-          </div>
-        )}
-
       </div>
+
+      {/* ✅ POPUP (OUTSIDE ZOOM — FIXED) */}
+      {activePlanet && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+          <div className="bg-gray-900 p-8 rounded-xl text-center max-w-md border border-white/20 backdrop-blur-md">
+
+            {activePlanet === "earth" && (
+              <>
+                <h2 className="text-2xl mb-4">🌍 Earth</h2>
+                <p>Our home planet. Launch point for humanity’s journey to Mars.</p>
+              </>
+            )}
+
+            {activePlanet === "mars" && (
+              <>
+                <h2 className="text-2xl mb-4">🔴 Mars</h2>
+                <p>The red planet. Future home for human exploration.</p>
+              </>
+            )}
+
+            <button
+              onClick={() => setActivePlanet(null)}
+              className="mt-6 px-4 py-2 bg-white text-black rounded hover:scale-110 transition"
+            >
+              Close
+            </button>
+
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

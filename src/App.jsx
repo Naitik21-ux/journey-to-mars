@@ -6,6 +6,8 @@ import Lenis from "@studio-freight/lenis";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  // ✅ STATE (ONLY ONCE)
+  const [loading, setLoading] = useState(true);
   const [activePlanet, setActivePlanet] = useState(null);
 
   // ⭐ Stars
@@ -32,6 +34,12 @@ function App() {
     );
   });
 
+  // 🚀 Loading
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // ✨ Smooth scroll
   useEffect(() => {
     const lenis = new Lenis({ smooth: true });
@@ -44,10 +52,8 @@ function App() {
     requestAnimationFrame(raf);
   }, []);
 
-  // 🚀 Animations (FIXED)
+  // 🚀 GSAP Animations
   useEffect(() => {
-
-    // Rocket animation
     gsap.to(".rocket", {
       scrollTrigger: {
         trigger: "body",
@@ -60,7 +66,6 @@ function App() {
       rotation: 45,
     });
 
-    // Section animation (FIXED)
     gsap.utils.toArray(".section").forEach((sec) => {
       gsap.fromTo(
         sec,
@@ -76,8 +81,16 @@ function App() {
         }
       );
     });
-
   }, []);
+
+  // ✅ LOADING SCREEN (ONLY HERE)
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-black text-white text-3xl">
+        🚀 Launching Mission...
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black text-white min-h-screen relative overflow-x-hidden">
@@ -97,7 +110,10 @@ function App() {
 
         {/* HERO */}
         <section className="section h-screen flex flex-col items-center justify-center text-center px-4 space-y-6">
-          <h1 className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white to-gray-400 text-transparent bg-clip-text">
+          <h1
+            className="text-5xl md:text-7xl font-bold bg-gradient-to-r from-white to-gray-400 text-transparent bg-clip-text"
+            style={{ textShadow: "0 0 20px rgba(255,255,255,0.6)" }}
+          >
             🚀 Journey to Mars
           </h1>
 
@@ -110,7 +126,7 @@ function App() {
         <section className="section h-screen flex items-center justify-center bg-blue-900">
           <div
             onClick={() => setActivePlanet("earth")}
-            className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg cursor-pointer hover:scale-110 transition"
+            className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg hover:scale-110 hover:bg-white/20 transition duration-300 cursor-pointer"
           >
             <h1 className="text-4xl mb-4">🌍 Launch from Earth</h1>
             <p className="text-gray-300">The journey begins from our home planet.</p>
@@ -119,7 +135,7 @@ function App() {
 
         {/* SPACE */}
         <section className="section h-screen flex items-center justify-center bg-black">
-          <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg">
+          <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg hover:scale-110 hover:bg-white/20 transition duration-300">
             <h1 className="text-4xl mb-4">🌌 Traveling Through Space</h1>
             <p className="text-gray-300">Navigate through the vast darkness of space.</p>
           </div>
@@ -129,7 +145,7 @@ function App() {
         <section className="section h-screen flex items-center justify-center bg-red-900">
           <div
             onClick={() => setActivePlanet("mars")}
-            className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg cursor-pointer hover:scale-110 transition"
+            className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg hover:scale-110 hover:bg-white/20 transition duration-300 cursor-pointer"
           >
             <h1 className="text-4xl mb-4">🔴 Landing on Mars</h1>
             <p className="text-gray-300">The red planet awaits human exploration.</p>
@@ -138,7 +154,7 @@ function App() {
 
         {/* END */}
         <section className="section h-screen flex items-center justify-center bg-gray-900">
-          <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg">
+          <div className="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg hover:scale-110 hover:bg-white/20 transition duration-300">
             <h1 className="text-4xl mb-4">🚀 Future of Humanity</h1>
             <p className="text-gray-300">Mars could be the next home for mankind.</p>
           </div>
